@@ -72,7 +72,7 @@ PaginationHelper(result, request, { custom_build }, per_page, page, total).pagin
 
 
 
-When paginating with queries on the Adonis.js `Lucid Models`, instantiate `PaginationHelper` and call the `paginate` method before returning the response. The data in your rrsponse should be the output of the `PaginationHelper`'s `paginate` method. Please note that you have to serialise the query result into JSON format before using it to instantiate `PaginationHelper`.
+When paginating with queries on the Adonis.js `Lucid Models`, instantiate `PaginationHelper` and call the `paginate` method before returning the response. The data in your response should be the output of the `PaginationHelper`'s `paginate` method. Please note that you have to serialise the query result into JSON format before using it to instantiate `PaginationHelper`.
 
 #### To instantiate the PaginationHelper for this use case, use this format:
 ```javascript
@@ -85,6 +85,7 @@ Make sure you set `custom_build` to `false`.
 
 ```javascript
 const PaginationHelper = use('App/Helpers/PaginationHelper');
+const Visitor = use('App/Models/Visitor')
 
 class VisitorController {
   async index ({ request, response, view, auth }) {
@@ -121,7 +122,7 @@ class VisitorController {
 
 ### USE CASE 2: With `Database` class
 
-Using the PaginationHelper with the `Database` class is a litle bit more involving. But I will explain all what you need to do to get it right. This isn't plug and play like the first use case.
+Using the PaginationHelper with the `Database` class is a litle bit more involving. But I will explain all what you need to do to get it right. This isn't plug-and-play like the first use case.
 
 #### To instantiate the PaginationHelper for this use case, use this format:
 ```javascript
@@ -134,6 +135,7 @@ Make sure you set `custom_build` to `true`.
 
 ```javascript
 const PaginationHelper = use('App/Helpers/PaginationHelper');
+const Ministry = use('App/Models/Ministry')
 
 class MinistryController {
   async index({ request, response, view, auth }) {
@@ -164,11 +166,11 @@ class MinistryController {
         .offset((page - 1) * per_page)
         
         // 2. Make sure that you get the total. If your controller has search functionality,
-        // ensure that you recount the total of the filtered result and store in the `total` constant.
-        const total = await subquery.getCount();
+        // ensure that you recount the total of the filtered result and store in the `total` variable.
+        let total = await subquery.getCount();
         
         // 3. For this use case, calling the `toJSON` function won't work on 
-        // the Database query result.The `PaginationHelper` class will internally
+        // the Database query result. The `PaginationHelper` class will internally
         // serialise the result to JSON.
         // 4. Ensure that you set `custom_build` to `true` when you are 
         // querying from the `Database` class.
